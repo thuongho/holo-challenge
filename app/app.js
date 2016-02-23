@@ -17,6 +17,20 @@
 
     // CONTROLLERS
     holoApp.controller('MaxTimeController', ['$scope', function($scope) {
-        $scope.title = "Hello Angular";
+        $scope.title = "Max Time";
+        $scope.maxTime;
+
+        $scope.getMaxTime = function() {
+            if ($scope.timeArray) {
+                var timeArray = $scope.timeArray;
+                timeArray = timeArray.replace(/[\[\]\{\}]/g, '').replace(/time:/g, '').split(', ');
+
+                timeArray.map(function (num) {
+                    num = parseFloat(num);
+                });
+
+                $scope.maxTime = Math.max.apply(null, timeArray);
+            }
+        };
     }]);
 })();

@@ -13,8 +13,8 @@ describe('maxTimeController', function() {
             var $scope = {};
             var controller = $controller('MaxTimeController', { $scope: $scope });
 
-            $scope.timeArray = [{time:200}, {time:410}, {time:1000}, {time:1000.5}];
-
+            $scope.timeArray = '[{time:200}, {time:410}, {time:1000}, {time:1000.5}]';
+            $scope.getMaxTime();
             expect($scope.maxTime).toBe(1000.5);
         });
     });
