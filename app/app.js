@@ -10,7 +10,15 @@
                 templateUrl: 'app/pages/max_time.html',
                 controller: 'MaxTimeController'
             })
-            .otherwise({ redirectTo: '/'});
+            .when('/max_time', {
+                templateUrl: 'app/pages/max_time.html',
+                controller: 'MaxTimeController',
+            })
+            .when('/rest', {
+                templateUrl: 'app/pages/rest.html',
+                controller: 'RESTController'
+            })
+            //.otherwise({ redirectTo: '/'});
     });
 
     // SERVICES
@@ -23,11 +31,11 @@
         $scope.getMaxTime = function() {
             if ($scope.timeArray) {
                 var timeArray = $scope.timeArray;
-                timeArray = timeArray.replace(/[\[\]\{\}]/g, '').replace(/time:/g, '').split(', ');
 
-                timeArray.map(function (num) {
-                    num = parseFloat(num);
-                });
+                // convert string to array of floats
+                timeArray = timeArray.replace(/[\[\]\{\}]/g, '').replace(/time:/g, '');
+                timeArray = timeArray.split(', ');
+                timeArray.map(function (num) { num = parseFloat(num); });
 
                 $scope.maxTime = Math.max.apply(null, timeArray);
             }
