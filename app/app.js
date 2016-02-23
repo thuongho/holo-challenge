@@ -8,7 +8,7 @@
         $routeProvider
             .when('/', {
                 templateUrl: 'app/pages/max_time.html',
-                controller: 'maxTimeController'
+                controller: 'MaxTimeController'
             })
             .otherwise({ redirectTo: '/'});
     });
@@ -16,7 +16,7 @@
     // SERVICES
 
     // CONTROLLERS
-    holoApp.controller('maxTimeController', ['$scope', function($scope) {
+    holoApp.controller('MaxTimeController', ['$scope', function($scope) {
         $scope.title = "Hello Angular";
     }]);
 })();

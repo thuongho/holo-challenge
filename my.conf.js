@@ -18,6 +18,7 @@ module.exports = function(config) {
       {pattern: 'lib/angular/angular.min.js', watch: false},
       {pattern: 'lib/angular-route/angular-route.min.js', watch: false},
       {pattern: 'lib/angular-resource/angular-resource.min.js', watch: false},
+      {pattern: 'lib/angular-mocks/angular-mocks.js', watch: false},
       '*.js',
       'app/*.js',
       'test/**/*.js'
