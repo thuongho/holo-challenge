@@ -1,0 +1,72 @@
+<h1>CRUD</h1>
+<div class="row">
+    <div class="col-md-4">
+        <div class="btn btn-default btn-block" ng-click="loadData()">GET</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="btn btn-default btn-block">POST</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="btn btn-default btn-block">PUT</div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-4">
+        <div class="btn btn-danger btn-block">DELETE</div>
+    </div>
+</div>
+<hr>
+<div class="row">
+    <h2>GET</h2>
+    <div class="col-md-8">
+        <ul ng-repeat="sampleObject in sampleObjects">
+            <li>{{sampleObject}}</li>
+        </ul>
+    </div>
+</div>
+<div class="row">
+    <h2>POST</h2>
+    <form>
+        <div class="form-group">
+            <label for="sampleName">Name</label>
+            <input type="text" class="form-control" id="sampleName" placeholder="Name">
+        </div>
+        <div class="form-group">
+            <label for="sampleValue">Value</label>
+            <input type="text" class="form-control" id="sampleValue" placeholder="Value">
+        </div>
+        <button type="submit" class="btn btn-default">POST</button>
+    </form>
+</div>
+<div class="row">
+    <h2>PUT</h2>
+    <form>
+        <div class="form-group">
+            <label for="sampleName">Name</label>
+            <input type="text" class="form-control" id="sampleName" placeholder="{{sampleObject.name}}">
+        </div>
+        <div class="form-group">
+            <label for="sampleValue">Value</label>
+            <input type="text" class="form-control" id="sampleValue" placeholder="{{sampleObject.value}}">
+        </div>
+        <button type="submit" class="btn btn-default">PUT</button>
+    </form>
+</div>
+<div class="row">
+    <h2>DELETE</h2>
+    <form>
+        <div class="form-group">
+            <label for="sampleName">Name</label>
+            <input type="text" class="form-control" id="sampleName" placeholder="{{sampleObject.name}}">
+        </div>
+        <div class="form-group">
+            <label for="sampleValue">Value</label>
+            <input type="text" class="form-control" id="sampleValue" placeholder="{{sampleObject.value}}">
+        </div>
+        <button type="submit" class="btn btn-default">DELETE</button>
+    </form>
+</div>
