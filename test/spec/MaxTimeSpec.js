@@ -1,21 +1,25 @@
-describe('maxTimeController', function() {
+'use strict';
 
-    beforeEach(angular.mock.module('holoApp'));
+describe('MaxTimeController', function() {
 
-    var $controller;
+    var _controller,
+        _scope = {};
 
-    beforeEach(angular.mock.inject(function(_$controller_) {
-        $controller = _$controller_;
-    }));
+    beforeEach(function() {
+        angular.mock.module('holoApp');
+        angular.mock.inject(function($controller) {
+            _controller = $controller;
+        });
+    });
+
 
     describe('getMaxTime', function() {
         it('should return the highest time', function() {
-            var $scope = {};
-            var controller = $controller('MaxTimeController', { $scope: $scope });
+            _controller = _controller('MaxTimeController', { $scope: _scope });
 
-            $scope.timeArray = '[{time:200}, {time:410}, {time:1000}, {time:1000.5}]';
-            $scope.getMaxTime();
-            expect($scope.maxTime).toBe(1000.5);
+            _scope.timeArray = '[{time:200}, {time:410}, {time:1000}, {time:1000.5}]';
+            _scope.getMaxTime();
+            expect(_scope.maxTime).toBe(1000.5);
         });
     });
 
