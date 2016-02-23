@@ -75,3 +75,5 @@ Temporary Items
 .apdisk
 
 notes.txt
+node_modules/
+.bowerrc

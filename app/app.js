@@ -7,9 +7,10 @@
     holoApp.config(function($routeProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: 'pages/max_time.html',
+                templateUrl: 'app/pages/max_time.html',
                 controller: 'maxTimeController'
-            });
+            })
+            .otherwise({ redirectTo: '/'});
     });
 
     // SERVICES

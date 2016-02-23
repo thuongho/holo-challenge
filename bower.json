@@ -1,0 +1,23 @@
+{
+  "name": "holobuilder",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "Thuong Ho <thuong.t.ho@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/thuongho/holo-challenge",
+  "moduleType": [],
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "angular": "^1.5.0",
+    "angular-route": "^1.5.0",
+    "angular-resource": "^1.5.0"
+  }
+}
