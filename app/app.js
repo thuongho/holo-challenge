@@ -121,6 +121,7 @@
         $scope.loadGetData = function() {
             // show all items
             $scope.showAllItemsContainer = true;
+            $scope.hideShowButtonName = 'Hide All Items';
 
             RESTService.get().then(function(data) {
                 $scope.allItems = true;
@@ -130,8 +131,19 @@
 
         // toggle show hide button
         $scope.toggleShowHide = function() {
-          $scope.allItems = $scope.allItems === false ? true : false;
-          $scope.hideShowButtonName = $scope.allItems === false ? 'Show All Items' : 'Hide All Items';
+            $scope.allItems = $scope.allItems === false ? true : false;
+            $scope.hideShowButtonName = $scope.allItems === false ? 'Show All Items' : 'Hide All Items';
+        };
+
+        // populate EDIT field when item is clicked
+        $scope.populateField = function(item) {
+            $scope.updateItem = item;
+            $scope.allItems = false;
+            $scope.hideShowButtonName = 'Show All Items';
+            $scope.showEdit = true;
+            //$scope.name = updateItem.name;
+            //$scope.value = updateItem.value;
+            //$scope.id = updateItem.id;
         };
 
         // POST
@@ -140,19 +152,18 @@
         $scope.postObject = function() {
             console.log('object: ' + JSON.stringify($scope.object));
             RESTService.post($scope.object);
+            $scope.showPost = false;
         };
 
         // PUT
-        $scope.populateField = function(item) {
-            $scope.allItems = false;
-            $scope.hideShowButtonName = 'Show All Items';
-            $scope.showEdit = true;
-            $scope.name = item.name;
-            $scope.value = item.value;
-            $scope.id = item.id;
+        $scope.updateEditItem = function() {
+            $scope.showAllItemsContainer = false;
+            // cannot put using url/:id
         };
 
         // DELETE
-        $scope.items = [1,2,3,4];
+        $scope.removeItem = function(item) {
+            RESTService.delete();
+        };
     }]);
 })();
