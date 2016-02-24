@@ -1,7 +1,39 @@
 <h1>CRUD</h1>
+<!-- GET -->
 <div class="row">
     <div class="col-md-4">
         <div class="btn btn-default btn-block" ng-click="loadGetData()">GET</div>
+    </div>
+</div>
+
+<!-- Display GET items -->
+<div class="row" ng-show="showAllItemsContainer" class="allItems">
+    <h2>All Items</h2>
+
+    <!-- toggle show and hide items -->
+    <button class="btn btn-block" ng-click="toggleShowHide()">{{hideShowButtonName}}</button>
+
+    <!-- individual items -->
+    <div class="col-md-4" ng-repeat="sampleItem in sampleObjects" class="allItems" ng-show="allItems">
+        <button class="btn btn-default btn-block" ng-click="populateField(sampleItem)">{{sampleItem}}</button>
+    </div>
+
+    <div class="row" ng-show="showEdit">
+        <h2>EDIT ITEM</h2>
+        <form>
+            <div class="form-group">
+                <input type="text" class="form-control" id="sampleID" placeholder="{{id}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="sampleName">Name</label>
+                <input type="text" class="form-control" id="sampleName" placeholder="{{name}}">
+            </div>
+            <div class="form-group">
+                <label for="sampleValue">Value</label>
+                <input type="text" class="form-control" id="sampleValue" placeholder="{{value}}">
+            </div>
+            <button type="submit" class="btn btn-default" ng-click="showEdit=false">PUT</button>
+        </form>
     </div>
 </div>
 <div class="row">
@@ -9,68 +41,46 @@
         <div class="btn btn-default btn-block" ng-click="">POST</div>
     </div>
 </div>
-<div class="row">
-    <div class="col-md-4">
-        <div class="btn btn-default btn-block" ng-click="loadAllData()">PUT</div>
-    </div>
-</div>
+<!--<div class="row" ng-show="showEdit">-->
+    <!--<h2>EDIT ITEM</h2>-->
+    <!--<form>-->
+        <!--<div class="form-group">-->
+            <!--<input type="text" class="form-control" id="sampleID" placeholder="{{id}}" readonly>-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+            <!--<label for="sampleName">Name</label>-->
+            <!--<input type="text" class="form-control" id="sampleName" placeholder="{{name}}">-->
+        <!--</div>-->
+        <!--<div class="form-group">-->
+            <!--<label for="sampleValue">Value</label>-->
+            <!--<input type="text" class="form-control" id="sampleValue" placeholder="{{value}}">-->
+        <!--</div>-->
+        <!--<button type="submit" class="btn btn-default" ng-click="showEdit=false">PUT</button>-->
+    <!--</form>-->
+<!--</div>-->
 <div class="row">
     <div class="col-md-4">
         <div class="btn btn-danger btn-block">DELETE</div>
     </div>
 </div>
 <hr>
-<div class="row">
-    <h2>GET</h2>
-    <div class="col-md-8">
-        <ul ng-repeat="sampleObject in sampleObjects">
-            <li>{{sampleObject}}</li>
-        </ul>
-    </div>
-</div>
+
 <div class="row">
     <h2>POST</h2>
     <form ng-submit="postObject()">
         <div class="form-group">
             <label for="sampleName">Name</label>
-            <input type="text" class="form-control" id="sampleName" placeholder="Name" ng-model="object.name">
+            <input type="text" class="form-control" id="sampleNamePost" placeholder="Name" ng-model="object.name">
         </div>
         <div class="form-group">
             <label for="sampleValue">Value</label>
-            <input type="text" class="form-control" id="sampleValue" placeholder="Value" ng-model="object.value">
+            <input type="text" class="form-control" id="sampleValuePost" placeholder="Value" ng-model="object.value">
         </div>
         <button type="submit" class="btn btn-default">POST</button>
     </form>
 </div>
-<div class="row">
-    <h2>PUT</h2>
-    <form>
-        <!--<ul ng-repeat="sampleItem in sampleItems">-->
-            <!--<li><a href="" ng-model="sampleItem" ng-click="sayItem()">{{sampleItem.name}}</a></li>-->
-        <!--</ul>-->
-        <p ng-repeat="sampleItem in sampleItems"><a href="javascript:;" ng-click="populateField(sampleItem)">{{sampleItem.name}}</a></p>
-        <div class="form-group">
-            <label for="sampleName">Name</label>
-            <input type="text" class="form-control" id="sampleName" placeholder="{{name}}">
-        </div>
-        <div class="form-group">
-            <label for="sampleValue">Value</label>
-            <input type="text" class="form-control" id="sampleValue" placeholder="{{value}}">
-        </div>
-        <button type="submit" class="btn btn-default">PUT</button>
-    </form>
-</div>
+
 <div class="row">
     <h2>DELETE</h2>
-    <form>
-        <div class="form-group">
-            <label for="sampleName">Name</label>
-            <input type="text" class="form-control" id="sampleName" placeholder="{{sampleObject.name}}">
-        </div>
-        <div class="form-group">
-            <label for="sampleValue">Value</label>
-            <input type="text" class="form-control" id="sampleValue" placeholder="{{sampleObject.value}}">
-        </div>
-        <button type="submit" class="btn btn-default">DELETE</button>
-    </form>
+
 </div>
