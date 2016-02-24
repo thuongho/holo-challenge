@@ -1,17 +1,17 @@
 <h1>CRUD</h1>
 <div class="row">
     <div class="col-md-4">
-        <div class="btn btn-default btn-block" ng-click="loadData()">GET</div>
+        <div class="btn btn-default btn-block" ng-click="loadGetData()">GET</div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-4">
-        <div class="btn btn-default btn-block">POST</div>
+        <div class="btn btn-default btn-block" ng-click="">POST</div>
     </div>
 </div>
 <div class="row">
     <div class="col-md-4">
-        <div class="btn btn-default btn-block">PUT</div>
+        <div class="btn btn-default btn-block" ng-click="loadAllData()">PUT</div>
     </div>
 </div>
 <div class="row">
@@ -30,14 +30,14 @@
 </div>
 <div class="row">
     <h2>POST</h2>
-    <form>
+    <form ng-submit="postObject()">
         <div class="form-group">
             <label for="sampleName">Name</label>
-            <input type="text" class="form-control" id="sampleName" placeholder="Name">
+            <input type="text" class="form-control" id="sampleName" placeholder="Name" ng-model="object.name">
         </div>
         <div class="form-group">
             <label for="sampleValue">Value</label>
-            <input type="text" class="form-control" id="sampleValue" placeholder="Value">
+            <input type="text" class="form-control" id="sampleValue" placeholder="Value" ng-model="object.value">
         </div>
         <button type="submit" class="btn btn-default">POST</button>
     </form>
@@ -45,13 +45,17 @@
 <div class="row">
     <h2>PUT</h2>
     <form>
+        <!--<ul ng-repeat="sampleItem in sampleItems">-->
+            <!--<li><a href="" ng-model="sampleItem" ng-click="sayItem()">{{sampleItem.name}}</a></li>-->
+        <!--</ul>-->
+        <p ng-repeat="sampleItem in sampleItems"><a href="javascript:;" ng-click="populateField(sampleItem)">{{sampleItem.name}}</a></p>
         <div class="form-group">
             <label for="sampleName">Name</label>
-            <input type="text" class="form-control" id="sampleName" placeholder="{{sampleObject.name}}">
+            <input type="text" class="form-control" id="sampleName" placeholder="{{name}}">
         </div>
         <div class="form-group">
             <label for="sampleValue">Value</label>
-            <input type="text" class="form-control" id="sampleValue" placeholder="{{sampleObject.value}}">
+            <input type="text" class="form-control" id="sampleValue" placeholder="{{value}}">
         </div>
         <button type="submit" class="btn btn-default">PUT</button>
     </form>

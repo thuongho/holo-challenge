@@ -24,6 +24,7 @@
     // SERVICES
     holoApp.factory('RESTService', ['$http', '$q', function($http, $q) {
 
+        //$http.get('/someUrl', config).then(successCallback, errorCallback);
         var get = function() {
             var deferred = $q.defer(),
                 url = 'http://2-dot-crowdev-template.appspot.com/v1/tests/?callback=JSON_CALLBACK';
@@ -39,8 +40,35 @@
             return deferred.promise;
         };
 
-        var post = function() {
+        var post = function(newObject) {
+            var newObject = {name: newObject.name, value: newObject.value};
+            var deferred = $q.defer(),
+                url = 'http://2-dot-crowdev-template.appspot.com/v1/tests/?callback=JSON_CALLBACK';
 
+            //$http.post('/someUrl', data, config).then(successCallback, errorCallback);
+            //$http.post(url, newObject).then(function(response) {
+            //    if (response.data.success) {
+            //        console.log(response);
+            //        deferred.resolve(true);
+            //    } else {
+            //        deferred.resolve(false);
+            //    }
+            //});
+            //return deferred.promise;
+
+
+            $http({
+                method: 'POST',
+                url: url,
+                data: newObject,
+                headers : {'Content-Type': 'application/x-www-form-urlencoded'}
+            }).success(function(data) {
+                if (data.error) {
+                    console.log(data.error);
+                } else {
+                    console.log("new object created with name: " + newObject.name);
+                }
+            });
         };
 
         var put = function() {
@@ -79,12 +107,38 @@
     }]);
 
     holoApp.controller('RESTController', ['$scope', 'RESTService', function($scope, RESTService) {
-        $scope.loadData = function() {
+
+        // GET
+        $scope.loadGetData = function() {
             RESTService.get().then(function(data) {
                 $scope.sampleObjects = data;
             });
         };
 
-        console.log('scope: ' + JSON.stringify($scope.sampleObjects));
+        // POST
+        $scope.object = {};
+
+        $scope.postObject = function() {
+            console.log('object: ' + JSON.stringify($scope.object));
+            RESTService.post($scope.object);
+        };
+
+        // PUT
+        $scope.loadAllData = function() {
+            RESTService.get().then(function(data) {
+                $scope.sampleItems = data;
+            });
+        };
+
+        $scope.sampleObjectItem ='';
+        $scope.sampleItem = '';
+
+        $scope.sayItem = function() {
+            console.log($scope.sampleItem);
+        };
+        $scope.populateField = function(item) {
+            $scope.name = item.name;
+            $scope.value = item.value;
+        };
     }]);
 })();
