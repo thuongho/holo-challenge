@@ -11,7 +11,9 @@
     <h2>All Items</h2>
 
     <!-- toggle show and hide items -->
-    <button class="btn btn-block" ng-click="toggleShowHide()">{{hideShowButtonName}}</button>
+    <div class="col-md-5">
+        <button class="btn btn-block btn-warning" ng-click="toggleShowHide()">{{hideShowButtonName}}</button>
+    </div>
 
     <!-- individual items -->
     <div class="col-md-4" ng-repeat="sampleItem in sampleObjects" class="allItems" ng-show="allItems">
@@ -33,29 +35,34 @@
                 <input type="text" class="form-control" id="sampleValue" placeholder="{{updateItem.value}}">
             </div>
             <button type="submit" class="btn btn-info" ng-click="updateEditItem()">Update</button>
-            <button class="btn btn-danger" ng-click="removeItem()" confirm="Delete {{updateItem}}">Delete</button>
+            <button class="btn btn-danger" ng-click="removeItem(updateItem)">Delete</button>
         </form>
     </div>
+
+    <hr>
+    <br>
 </div>
 <div class="row">
     <div class="col-md-4">
         <div class="btn btn-primary btn-block" ng-click="showPost=true">Create New Item</div>
     </div>
 </div>
+<br>
 
-<hr>
 
 <div class="row" ng-show="showPost">
+    <div class="col-md-4">
     <h2>POST</h2>
-    <form ng-submit="postObject()">
-        <div class="form-group">
-            <label for="sampleName">Name</label>
-            <input type="text" class="form-control" id="sampleNamePost" placeholder="Name" ng-model="object.name">
-        </div>
-        <div class="form-group">
-            <label for="sampleValue">Value</label>
-            <input type="text" class="form-control" id="sampleValuePost" placeholder="Value" ng-model="object.value">
-        </div>
-        <button type="submit" class="btn btn-default">POST</button>
-    </form>
+        <form ng-submit="postObject()">
+            <div class="form-group">
+                <label for="sampleName">Name</label>
+                <input type="text" class="form-control" id="sampleNamePost" placeholder="Name" ng-model="object.name">
+            </div>
+            <div class="form-group">
+                <label for="sampleValue">Value</label>
+                <input type="text" class="form-control" id="sampleValuePost" placeholder="Value" ng-model="object.value">
+            </div>
+            <button type="submit" class="btn btn-default">POST</button>
+        </form>
+    </div>
 </div>

@@ -7,8 +7,8 @@
     holoApp.config(function($routeProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: 'app/pages/max_time.html',
-                controller: 'MaxTimeController'
+                templateUrl: 'app/index.html',
+                controller: 'MainController',
             })
             .when('/max_time', {
                 templateUrl: 'app/pages/max_time.html',
@@ -16,8 +16,8 @@
             })
             .when('/rest', {
                 templateUrl: 'app/pages/rest.html',
-                controller: 'RESTController'
-            })
+                controller: 'RESTController',
+            });
             //.otherwise({ redirectTo: '/'});
     });
 
@@ -42,33 +42,20 @@
 
         var post = function(pageObject) {
             var newObject = {name: pageObject.name, value: pageObject.value};
-            //var deferred = $q.defer(),
+            var deferred = $q.defer();
             var url = 'http://2-dot-crowdev-template.appspot.com/v1/tests/?callback=JSON_CALLBACK';
+            var header = {'Content-Type': 'application/x-www-form-urlencoded'};
 
             //$http.post('/someUrl', data, config).then(successCallback, errorCallback);
-            //$http.post(url, newObject).then(function(response) {
-            //    if (response.data.success) {
-            //        console.log(response);
-            //        deferred.resolve(true);
-            //    } else {
-            //        deferred.resolve(false);
-            //    }
-            //});
-            //return deferred.promise;
-
-
-            $http({
-                method: 'POST',
-                url: url,
-                data: newObject,
-                headers : {'Content-Type': 'application/x-www-form-urlencoded'}
-            }).success(function(data) {
-                if (data.error) {
-                    console.log(data.error);
+            $http.post(url, newObject, header).then(function(response) {
+                if (response.data.success) {
+                    console.log(response);
+                    deferred.resolve(true);
                 } else {
-                    console.log("new object created with name: " + newObject.name);
+                    deferred.resolve(false);
                 }
             });
+            return deferred.promise;
         };
 
         var put = function(pageObject) {
@@ -84,8 +71,16 @@
                 });
         };
 
-        var remove = function() {
-
+        var remove = function(objectID) {
+            //delete: { method: 'DELETE', params: {id: '@id'} }
+            var url = 'http://2-dot-crowdev-template.appspot.com/v1/tests/' + objectID.id + '?callback=JSON_CALLBACK';
+            $http.delete(url)
+                .success(function(data, status) {
+                    console.log(JSON.stringify(data) + " deleted.");
+                })
+                .error(function(data, status) {
+                    console.log(status);
+                });
         };
 
         return {
@@ -97,6 +92,12 @@
     }]);
 
     // CONTROLLERS
+    holoApp.controller('MainController', ['$scope', '$location', function($scope, $location) {
+        $scope.isActive = function(viewLocation) {
+            return viewLocation === $location.path();
+        };
+    }]);
+
     holoApp.controller('MaxTimeController', ['$scope', function($scope) {
         $scope.title = "Max Time";
         $scope.maxTime;
@@ -115,7 +116,7 @@
         };
     }]);
 
-    holoApp.controller('RESTController', ['$scope', 'RESTService', function($scope, RESTService) {
+    holoApp.controller('RESTController', ['$scope', '$route', 'RESTService', function($scope, $route, RESTService) {
 
         // GET
         $scope.loadGetData = function() {
@@ -141,9 +142,6 @@
             $scope.allItems = false;
             $scope.hideShowButtonName = 'Show All Items';
             $scope.showEdit = true;
-            //$scope.name = updateItem.name;
-            //$scope.value = updateItem.value;
-            //$scope.id = updateItem.id;
         };
 
         // POST
@@ -163,7 +161,17 @@
 
         // DELETE
         $scope.removeItem = function(item) {
-            RESTService.delete();
+            if (confirm('Delete ' + JSON.stringify(item) + '?')) {
+                RESTService.delete(item);
+                $route.reload();
+                // hide edit after deleting
+                //$scope.showEdit = false;
+                //$scope.updateItem = {};
+                //
+                //// generate new get list
+                //$scope.sampleObjects = {};
+                //$scope.loadGetData();
+            }
         };
     }]);
 })();
