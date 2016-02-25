@@ -32,7 +32,7 @@
 <body>
 
 <!-- nav bar -->
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-default" role="navigation" ng-controller="MainController">
     <div class="navbar-header">
         <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#nav-links" aria-expanded="false">
             <span class="sr-only">Toggle navigation</span>
@@ -45,19 +45,20 @@
     <!-- collapse section including links -->
     <div class="collapse navbar-collapse" id="nav-links">
         <ul class="nav navbar-nav navbar-right">
-            <li class="active">
+            <li ng-class="{active: isActive('/')}">
                 <a href="#cover" class="black">Home</a>
             </li>
-            <li>
+            <!--<li ng-class="{active: isActive('/max_time')}">-->
+            <li ng-class="{active: isActive('/max_time')}">
                 <a href="#/max_time" class="underline_from_center">Max Time</a>
             </li>
-            <li>
+            <li ng-class="{active: isActive('/rest')}">
                 <a href="#/rest" class="underline_from_center">REST</a>
             </li>
-            <li>
+            <li ng-class="{active: isActive('/contact_manager')}">
                 <a href="#/contact_manager" class="underline_from_center">Contact Manager</a>
             </li>
-            <li>
+            <li ng-class="{active: isActive('/threejs')}">
                 <a href="#/threejs" class="underline_from_center">ThreeJS</a>
             </li>
         </ul>
