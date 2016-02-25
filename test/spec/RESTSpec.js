@@ -33,6 +33,7 @@ describe('RESTController', function() {
             _controller = $controller;
             _mockBackend = $httpBackend;
             _RESTService = RESTService;
+            console.log('rs: ' + JSON.stringify(RESTService));
         });
 
     });
@@ -41,18 +42,19 @@ describe('RESTController', function() {
         it('should return a json with all existing created objects', function() {
 
             _scope = {};
-            _controller = _controller('RESTServiceController', { $scope: _scope }, _RESTService);
+            _controller = _controller('RESTController', { $scope: _scope }, _RESTService);
 
-            var sampleObject = new _RESTService({
+            var sampleObject = {
                 name: 'Sam',
                 value: 'Master of the Universe!'
-            });
+            };
 
             var sampleObjects = [sampleObject];
 
-            _mockBackend.expectGET('http://localhost:63342/holobuilder/index.html#/rest').respond(sampleObjects);
+            _mockBackend.expectGET('/rest').respond(sampleObjects);
 
-            _scope.find();
+            //_scope.find();
+            //console.log('scope: ' + JSON.stringify(_scope));
             _mockBackend.flush();
             //expect(_scope.rest).toEqualData(sampleObjects);
             expect(_scope.rest.length).toEqual(1);
@@ -63,12 +65,12 @@ describe('RESTController', function() {
         it('should create a test object', function() {
 
             _scope = {};
-            _controller = _controller('RESTServiceController', { $scope: _scope }, _RESTService);
+            _controller = _controller('RESTController', { $scope: _scope }, _RESTService);
 
-            var sampleObject = new _RESTService({
+            var sampleObject = {
                 name: 'Mysteries',
                 value: 'Unseen World'
-            });
+            };
 
             _mockBackend.expectPOST('http://localhost:63342/holobuilder/index.html#/rest', sampleObject).respond([{}]);
 
@@ -88,7 +90,7 @@ describe('RESTController', function() {
                 "Accept":"application/json, text/plain, */*"
             }).respond({id:0, name: 'Dr. Love', value: 'Readings from the heart'});
 
-            _controller = _controller('RESTServiceController', { $scope: _scope, $routeParams: _params}, _RESTService);
+            _controller = _controller('RESTController', { $scope: _scope, $routeParams: _params}, _RESTService);
             var sampleObject = {id: 0, name: 'Dr. Love', value: 'Heartless'};
 
             _mockBackend.flush();
@@ -118,7 +120,7 @@ describe('RESTController', function() {
                 "Accept":"application/json, text/plain, */*"
             }).respond({id:0, name: 'Dr. Love', value: 'Readings from the heart'});
 
-            _controller = _controller('RESTServiceController', { $scope: _scope, $routeParams: _params}, _RESTService);
+            _controller = _controller('RESTController', { $scope: _scope, $routeParams: _params}, _RESTService);
 
             _mockBackend.flush();
 

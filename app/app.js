@@ -59,16 +59,34 @@
         };
 
         var put = function(pageObject) {
-            var updateObject = {name: pageObject.name, value: pageObject.value};
-            var url = 'http://2-dot-crowdev-template.appspot.com/v1/tests/' + pageObject.id + '?callback=JSON_CALLBACK';
+            //var updateObject = {name: pageObject.name, value: pageObject.value};
+            var updateObjectName = '&name=' + pageObject.name.replace(/ /g, '%20');
+            var updateObjectValue = '&value=' + pageObject.value.replace(/ /g, '%20');
+            var url = 'http://2-dot-crowdev-template.appspot.com/v1/tests/'
+                        + pageObject.id
+                        + '?callback=JSON_CALLBACK'
+                        + updateObjectName
+                        + updateObjectValue;
 
-            $http.put(url + updateObject)
-                .success(function(data, status, headers) {
+            console.log(url);
+
+            $http.jsonp(url)
+                .success(function(data) {
                     console.log(data + " updated.");
                 })
                 .error(function(data, status, header, config) {
-                    console.log(status);
+                    console.log('data: ' + data);
+                    console.log('status: ' + status);
+                    console.log('header: ' + header);
+                    console.log('config: ' + config);
                 });
+            //$http.put(url + updateObject)
+            //    .success(function(data, status, headers) {
+            //        console.log(data + " updated.");
+            //    })
+            //    .error(function(data, status, header, config) {
+            //        console.log(status);
+            //    });
         };
 
         var remove = function(objectID) {
@@ -151,12 +169,15 @@
             console.log('object: ' + JSON.stringify($scope.object));
             RESTService.post($scope.object);
             $scope.showPost = false;
+            $route.reload();
         };
 
         // PUT
         $scope.updateEditItem = function() {
             $scope.showAllItemsContainer = false;
-            // cannot put using url/:id
+            //if ($scope.updateItem.name !== $scope.selectedItem.name || $scope.updateItem.value !== $scope.selectedItem.value) {}
+            RESTService.put($scope.updateItem);
+            $route.reload();
         };
 
         // DELETE
@@ -164,13 +185,6 @@
             if (confirm('Delete ' + JSON.stringify(item) + '?')) {
                 RESTService.delete(item);
                 $route.reload();
-                // hide edit after deleting
-                //$scope.showEdit = false;
-                //$scope.updateItem = {};
-                //
-                //// generate new get list
-                //$scope.sampleObjects = {};
-                //$scope.loadGetData();
             }
         };
     }]);

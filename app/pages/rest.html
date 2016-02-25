@@ -22,19 +22,29 @@
 
     <div class="col-md-4" ng-show="showEdit">
         <h2>EDIT ITEM</h2>
-        <form>
+        <form ng-submit="updateEditItem()">
             <div class="form-group">
-                <input type="text" class="form-control" id="sampleID" placeholder="{{updateItem.id}}" readonly>
+                <input type="text"
+                       class="form-control"
+                       id="sampleID"
+                       ng-model="updateItem.id"
+                       readonly>
             </div>
             <div class="form-group">
                 <label for="sampleName">Name</label>
-                <input type="text" class="form-control" id="sampleName" placeholder="{{updateItem.name}}">
+                <input type="text"
+                       class="form-control"
+                       id="sampleName"
+                       ng-model="updateItem.name">
             </div>
             <div class="form-group">
                 <label for="sampleValue">Value</label>
-                <input type="text" class="form-control" id="sampleValue" placeholder="{{updateItem.value}}">
+                <input type="text"
+                       class="form-control"
+                       id="sampleValue"
+                       ng-model="updateItem.value">
             </div>
-            <button type="submit" class="btn btn-info" ng-click="updateEditItem()">Update</button>
+            <button type="submit" class="btn btn-info">Update</button>
             <button class="btn btn-danger" ng-click="removeItem(updateItem)">Delete</button>
         </form>
     </div>
@@ -48,8 +58,6 @@
     </div>
 </div>
 <br>
-
-
 <div class="row" ng-show="showPost">
     <div class="col-md-4">
     <h2>POST</h2>
