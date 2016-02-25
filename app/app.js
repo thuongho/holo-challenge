@@ -140,7 +140,7 @@
         $scope.loadGetData = function() {
             // show all items
             $scope.showAllItemsContainer = true;
-            $scope.hideShowButtonName = 'Hide All Items';
+            $scope.hideShowButtonName = 'Hide All';
 
             RESTService.get().then(function(data) {
                 $scope.allItems = true;
@@ -151,14 +151,14 @@
         // toggle show hide button
         $scope.toggleShowHide = function() {
             $scope.allItems = $scope.allItems === false ? true : false;
-            $scope.hideShowButtonName = $scope.allItems === false ? 'Show All Items' : 'Hide All Items';
+            $scope.hideShowButtonName = $scope.allItems === false ? 'Show All' : 'Hide All';
         };
 
         // populate EDIT field when item is clicked
         $scope.populateField = function(item) {
             $scope.updateItem = item;
             $scope.allItems = false;
-            $scope.hideShowButtonName = 'Show All Items';
+            $scope.hideShowButtonName = 'Show All';
             $scope.showEdit = true;
         };
 

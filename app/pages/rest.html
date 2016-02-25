@@ -1,14 +1,16 @@
-<h1>CRUD</h1>
+<h1>Contact Manager and REST</h1>
 <!-- GET -->
 <div class="row">
     <div class="col-md-4">
-        <div class="btn btn-success btn-block" ng-click="loadGetData()">GET</div>
+        <div class="btn btn-success btn-block" ng-click="loadGetData()"><span class="glyphicon glyphicon-user"></span> Contacts</div>
     </div>
 </div>
 
 <!-- Display GET items -->
 <div class="row" ng-show="showAllItemsContainer" class="allItems">
-    <h2>All Items</h2>
+    <div class="col-md-5">
+        <h2>All Contacts</h2>
+    </div>
 
     <!-- toggle show and hide items -->
     <div class="col-md-5">
@@ -17,11 +19,12 @@
 
     <!-- individual items -->
     <div class="col-md-4" ng-repeat="sampleItem in sampleObjects" class="allItems" ng-show="allItems">
-        <button class="btn btn-default btn-block" ng-click="populateField(sampleItem)">{{sampleItem}}</button>
+        <button class="btn btn-default btn-block" ng-click="populateField(sampleItem)">{{sampleItem.name ? sampleItem.name : "Mystery Contact"}}</button>
     </div>
 
+    <!-- edit / delete item -->
     <div class="col-md-4" ng-show="showEdit">
-        <h2>EDIT ITEM</h2>
+        <h2>EDIT Contact</h2>
         <form ng-submit="updateEditItem()">
             <div class="form-group">
                 <input type="text"
@@ -52,12 +55,16 @@
     <hr>
     <br>
 </div>
+
+<!-- add new contact -->
 <div class="row">
     <div class="col-md-4">
-        <div class="btn btn-primary btn-block" ng-click="showPost=true">Create New Item</div>
+        <div class="btn btn-primary btn-block" ng-click="showPost=true"><span class="glyphicon glyphicon-plus"></span> Add New Contact</div>
     </div>
 </div>
 <br>
+
+<!-- POST -->
 <div class="row" ng-show="showPost">
     <div class="col-md-4">
     <h2>POST</h2>
@@ -67,7 +74,7 @@
                 <input type="text" class="form-control" id="sampleNamePost" placeholder="Name" ng-model="object.name">
             </div>
             <div class="form-group">
-                <label for="sampleValue">Value</label>
+                <label for="sampleValue">Contact Info</label>
                 <input type="text" class="form-control" id="sampleValuePost" placeholder="Value" ng-model="object.value">
             </div>
             <button type="submit" class="btn btn-default">POST</button>
