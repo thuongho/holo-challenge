@@ -187,5 +187,12 @@
                 $route.reload();
             }
         };
+
+        // SORT
+        $scope.sort = function() {
+            $scope.sortName = $scope.sortName === 'name' ? 'value' : 'name';
+        };
+
+        // ORDER
     }]);
 })();
