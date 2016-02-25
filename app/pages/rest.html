@@ -15,7 +15,7 @@
     <!-- search contacts -->
     <div class="col-md-10 .col-md-offset-1">
         <input class="form-control" type="text" placeholder="Search Contacts" ng-model="searchText">
-        <p><b>Order By:</b> <span ng-click="order()">{{orderName}}</span> | <b>Sort By:</b> <span ng-init="sortName='name'" ng-click="sort()">{{sortName}}</span></p>
+        <p><b>Order By:</b> <span ng-click="order(false)" ng-class="{'text-warning': orderAsc}">A-Z</span> | <span ng-click="order(true)" ng-class="{'text-warning': orderDesc}">Z-A</span> <b>Sort By:</b> <span ng-click="sort('name')" ng-class="{'text-warning': sortName}">Name</span> | <span ng-click="sort('value')" ng-class="{'text-warning': sortValue}">Value</span></p>
     </div>
 
     <!-- toggle show and hide items -->
@@ -25,7 +25,7 @@
     <br>
 
     <!-- individual items -->
-    <div class="col-md-10 .col-md-offset-1" ng-repeat="sampleItem in sampleObjects | filter:searchText | orderBy:sortName" class="allItems" ng-show="allItems">
+    <div class="col-md-10 .col-md-offset-1" ng-repeat="sampleItem in sampleObjects | filter:searchText | orderBy:sortType:reverse" class="allItems" ng-show="allItems">
         <button class="btn btn-default btn-block" ng-click="populateField(sampleItem)">
             <b>{{sampleItem.name ? sampleItem.name : "Mystery Contact"}}</b>
             -

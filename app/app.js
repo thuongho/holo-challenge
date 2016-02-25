@@ -30,7 +30,7 @@
                 url = 'http://2-dot-crowdev-template.appspot.com/v1/tests/?callback=JSON_CALLBACK';
 
             $http.get(url).success(function(data, status, header, config) {
-                console.log(data);
+                //console.log(data);
                 deferred.resolve(data);
             }).error(function(data, status, header, config) {
                 console.log(status);
@@ -189,10 +189,17 @@
         };
 
         // SORT
-        $scope.sort = function() {
-            $scope.sortName = $scope.sortName === 'name' ? 'value' : 'name';
+        $scope.sort = function(value) {
+            $scope.sortType = value;
+            $scope.sortName = value === 'name' ? true : false;
+            $scope.sortValue = value === 'value' ? true : false;
         };
 
         // ORDER
+        $scope.order = function(bool) {
+            $scope.reverse = bool;
+            $scope.orderAsc = bool === false ? true : false;
+            $scope.orderDesc = bool === true ? true : false;
+        };
     }]);
 })();
