@@ -1,31 +1,31 @@
-<h1>Contact Manager and REST</h1>
+<h1 class="text-center">Contact Manager and REST</h1>
 <!-- GET -->
 <div class="row">
-    <div class="col-md-10 .col-md-offset-1">
+    <div class="col-md-12">
         <div class="btn btn-success btn-block" ng-click="loadGetData()"><span class="glyphicon glyphicon-user"></span> Contacts</div>
     </div>
 </div>
 
 <!-- Display GET items -->
 <div class="row" ng-show="showAllItemsContainer" class="allItems">
-    <div class="col-md-10 .col-md-offset-1">
+    <div class="col-md-12">
         <h2>All Contacts</h2>
     </div>
 
     <!-- search contacts -->
-    <div class="col-md-10 .col-md-offset-1">
+    <div class="col-md-12">
         <input class="form-control" type="text" placeholder="Search Contacts" ng-model="searchText">
         <p><b>Order By:</b> <span ng-click="order(false)" ng-class="{'text-warning': orderAsc}">A-Z</span> | <span ng-click="order(true)" ng-class="{'text-warning': orderDesc}">Z-A</span> <b>Sort By:</b> <span ng-click="sort('name')" ng-class="{'text-warning': sortName}">Name</span> | <span ng-click="sort('value')" ng-class="{'text-warning': sortValue}">Value</span></p>
     </div>
 
     <!-- toggle show and hide items -->
-    <div class="col-md-10 .col-md-offset-1">
+    <div class="col-md-12">
         <button class="btn btn-block btn-warning" ng-click="toggleShowHide()">{{hideShowButtonName}}</button>
     </div>
     <br>
 
     <!-- individual items -->
-    <div class="col-md-10 .col-md-offset-1" ng-repeat="sampleItem in sampleObjects | filter:searchText | orderBy:sortType:reverse" class="allItems" ng-show="allItems">
+    <div class="col-md-12" ng-repeat="sampleItem in sampleObjects | filter:searchText | orderBy:sortType:reverse" class="allItems text-justify" ng-show="allItems">
         <button class="btn btn-default btn-block" ng-click="populateField(sampleItem)">
             <b>{{sampleItem.name ? sampleItem.name : "Mystery Contact"}}</b>
             -
@@ -34,7 +34,7 @@
     </div>
 
     <!-- edit / delete item -->
-    <div class="col-md-10 .col-md-offset-1" ng-show="showEdit">
+    <div class="col-md-12" ng-show="showEdit">
         <!-- button to close edit -->
         <span class="glyphicon glyphicon-remove-circle pull-right" ng-click="showEdit=false"></span>
 
@@ -68,13 +68,12 @@
         </form>
     </div>
 
-    <hr>
     <br>
 </div>
 
 <!-- add new contact -->
 <div class="row">
-    <div class="col-md-10 .col-md-offset-1">
+    <div class="col-md-12">
         <div class="btn btn-primary btn-block" ng-click="showPost=true"><span class="glyphicon glyphicon-plus"></span> Add New Contact</div>
     </div>
 </div>
@@ -82,7 +81,7 @@
 
 <!-- POST -->
 <div class="row" ng-show="showPost">
-    <div class="col-md-10 .col-md-offset-1">
+    <div class="col-md-12">
     <h2>POST</h2>
         <form ng-submit="postObject()">
             <div class="form-group">

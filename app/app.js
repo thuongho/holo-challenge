@@ -17,6 +17,10 @@
             .when('/rest', {
                 templateUrl: 'app/pages/rest.html',
                 controller: 'RESTController',
+            })
+            .when('/threejs', {
+                templateUrl: 'app/pages/threejs.html',
+                controller: 'ThreeJSController'
             });
             //.otherwise({ redirectTo: '/'});
     });
