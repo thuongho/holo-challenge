@@ -207,7 +207,38 @@
         };
     }]);
 
-    holoApp.controller('ThreeJSController', ['$scope', function($scope) {
+    holoApp.controller('ThreeJSController', ['$scope', '$window', function($scope, $window) {
+        var scene = new THREE.Scene(),
+            renderer = new THREE.WebGLRenderer(),
+            light = THREE.AmbientLight(0XFFFF),
+            camera;
+            //plane,
+            //clickObject;
 
+        $scope.initScene = function() {
+            // size to render content
+            renderer.setSize($window.innerWidth, $window.innerHeight);
+
+            angular.element(document.querySelector('#webgl-container').appendChild(renderer.domElement));
+
+            scene.add(light);
+
+            camera = new THREE.PerspectiveCamera(35, $window.innerWidth / $window.innerHeight, 1, 1000);
+            camera.position.z = 100;
+
+            scene.add(camera);
+
+            render();
+        };
+
+        function render() {
+            renderer.render(scene, camera);
+            requestAnimationFrame(render);
+        }
+
+        // for debugging
+        return {
+            scene: scene
+        }
     }]);
 })();
