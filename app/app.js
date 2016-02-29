@@ -210,20 +210,30 @@
     holoApp.controller('ThreeJSController', ['$scope', '$window', function($scope, $window) {
         var scene = new THREE.Scene(),
             renderer = new THREE.WebGLRenderer(),
-            light = THREE.AmbientLight(0XFFFF),
+            light = new THREE.AmbientLight(0XFFFF),
             camera;
             //plane,
             //clickObject;
+        var containerWidth,
+            containerHeight;
+
+        var targetContainer = document.querySelector('#webgl-container');
 
         $scope.initScene = function() {
+            containerHeight = angular.element(targetContainer.clientHeight);
+            containerWidth = targetContainer.clientWidth;
             // size to render content
-            renderer.setSize($window.innerWidth, $window.innerHeight);
+            //renderer.setSize($window.innerWidth, $window.innerHeight);
+            //renderer.setSize(containerWidth, containerHeight);
+            //renderer.setSize(document.querySelector('#webgl-container').clientWidth, document.querySelector('#webgl-container').clientHeight);
+            renderer.setSize(containerWidth, $window.innerHeight);
 
-            angular.element(document.querySelector('#webgl-container').appendChild(renderer.domElement));
+            angular.element(targetContainer.appendChild(renderer.domElement));
 
             scene.add(light);
 
-            camera = new THREE.PerspectiveCamera(35, $window.innerWidth / $window.innerHeight, 1, 1000);
+            //camera = new THREE.PerspectiveCamera(35, $window.innerWidth / $window.innerHeight, 1, 1000);
+            camera = new THREE.PerspectiveCamera(35, containerWidth / containerHeight, 1, 1000);
             camera.position.z = 100;
 
             scene.add(camera);
