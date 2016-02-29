@@ -209,11 +209,16 @@
 
     holoApp.controller('ThreeJSController', ['$scope', '$window', function($scope, $window) {
 
+        // The Set
         var scene = new THREE.Scene(),
             renderer = new THREE.WebGLRenderer(),
             light = new THREE.AmbientLight(0xffffff),
             camera,
             plane;
+
+        // Actor / Actresses
+        var cube,
+            cubeNumber = 0;
 
         // Stats
         var stats = new Stats();
@@ -231,25 +236,22 @@
 
         $scope.initScene = function() {
 
+            // set size to render content
             containerWidth = targetContainer.clientWidth;
-
-            // size to render content
             renderer.setSize(containerWidth, $window.innerHeight);
 
             // Stats
             stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
 
             // align top-left
+            // bootstrap col adds 15px padding to left
+            // h1 h: 39, margin-top: 20, margin-bottom: 10 and dropdown h: 34
             stats.domElement.style.position = 'absolute';
-            // bootstrap col adds 15px padding
             stats.domElement.style.left = '15px';
-            // h1 h: 39, margin-top: 20, margin-bottom: 10
-            // dropdown h: 34
             stats.domElement.style.top = '105px';
 
+            // add elements to webgl-container
             angular.element(targetContainer.appendChild(stats.domElement));
-
-            // render to webgl-container
             angular.element(targetContainer.appendChild(renderer.domElement));
 
             // Grid
@@ -257,18 +259,35 @@
             plane.setColors(new THREE.Color(0x00FFFF), new THREE.Color(0x00CC00));
             scene.add(plane);
 
-            // Lights!
+            // LIGHTS!
             scene.add(light);
 
-            // Camera!
+            // CAMERA!
             camera = new THREE.PerspectiveCamera(35, containerWidth / $window.innerHeight, 1, 1000);
             camera.position.z = 25;
-
             scene.add(camera);
 
+            // Controls
             controls = new THREE.OrbitControls( camera, renderer.domElement );
 
-            // Action!
+            // Stars of the Scene
+            $scope.addCube = function() {
+
+                cubeNumber++;
+
+                cube = new THREE.Mesh(
+                    //BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments)
+                    new THREE.BoxGeometry(1,2,1),
+                    new THREE.MeshBasicMaterial({ color: 0xCCFFFF})
+                );
+
+                cube.name = "cube" + cubeNumber;
+                cube.position.y = 1;
+
+                scene.add(cube);
+            };
+
+            // ACTION!
             render();
         };
 
