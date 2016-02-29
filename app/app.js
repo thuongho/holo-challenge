@@ -215,6 +215,9 @@
             camera,
             plane;
 
+        // Stats
+        var stats = new Stats();
+
         var targetContainer = document.querySelector('#webgl-container'),
             containerWidth;
 
@@ -222,7 +225,7 @@
         var controls;
 
         // Grid
-        var size = 100,
+        var size = 10,
             step = 1;
 
 
@@ -232,6 +235,16 @@
 
             // size to render content
             renderer.setSize(containerWidth, $window.innerHeight);
+
+            // Stats
+            stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
+
+            // align top-left
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '0px';
+            stats.domElement.style.top = '0px';
+
+            angular.element(targetContainer.appendChild(stats.domElement));
 
             // render to webgl-container
             angular.element(targetContainer.appendChild(renderer.domElement));
@@ -246,12 +259,11 @@
 
             // Camera!
             camera = new THREE.PerspectiveCamera(35, containerWidth / $window.innerHeight, 1, 1000);
-            camera.position.z = 10;
+            camera.position.z = 25;
 
             scene.add(camera);
 
-            controls = new THREE.OrbitControls(camera);
-            controls.addEventListener('change', render);
+            controls = new THREE.OrbitControls( camera, renderer.domElement );
 
             // Action!
             render();
@@ -260,6 +272,7 @@
         function render() {
             renderer.render(scene, camera);
             requestAnimationFrame(render);
+            stats.update();
         }
 
         // for debugging
