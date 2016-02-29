@@ -206,4 +206,8 @@
             $scope.orderDesc = bool === true ? true : false;
         };
     }]);
+
+    holoApp.controller('ThreeJSController', ['$scope', function($scope) {
+
+    }]);
 })();
