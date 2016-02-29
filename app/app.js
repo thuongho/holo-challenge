@@ -217,8 +217,12 @@
             plane;
 
         // Actor / Actresses
-        var cube,
-            cubeNumber = 0;
+        var geometry,
+            material,
+            cube,
+            cubeNumber = 0,
+            sphere,
+            sphereNumber = 0;
 
         // Stats
         var stats = new Stats();
@@ -275,11 +279,10 @@
 
                 cubeNumber++;
 
-                cube = new THREE.Mesh(
-                    //BoxGeometry(width, height, depth, widthSegments, heightSegments, depthSegments)
-                    new THREE.BoxGeometry(1,2,1),
-                    new THREE.MeshBasicMaterial({ color: 0xCCFFFF})
-                );
+                geometry = new THREE.BoxGeometry(1,2,1);
+                material = new THREE.MeshBasicMaterial({ color: 0xCCFFFF });
+
+                cube = new THREE.Mesh(geometry, material);
 
                 cube.name = "cube" + cubeNumber;
                 cube.position.y = 1;
@@ -287,11 +290,31 @@
                 scene.add(cube);
             };
 
+
+            $scope.addSphere = function() {
+
+                sphereNumber++;
+
+                geometry = new THREE.SphereGeometry(0.2, 32, 32);
+                material = new THREE.MeshBasicMaterial({ color: 0xFFFFCC });
+
+                sphere = new THREE.Mesh(geometry, material);
+
+                sphere.name = "sphere" + sphereNumber;
+                sphere.position.y = 1;
+
+                scene.add(sphere);
+            };
+
             // ACTION!
             render();
         };
 
         function render() {
+            if (sphere) {
+                sphere.rotation.y += 0.005;
+            }
+
             renderer.render(scene, camera);
             requestAnimationFrame(render);
             stats.update();
@@ -299,7 +322,9 @@
 
         // for debugging
         return {
-            scene: scene
+            scene: scene,
+            sphere: sphere,
+            cube: cube
         }
     }]);
 })();
