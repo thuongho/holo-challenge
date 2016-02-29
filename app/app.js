@@ -208,36 +208,52 @@
     }]);
 
     holoApp.controller('ThreeJSController', ['$scope', '$window', function($scope, $window) {
+
         var scene = new THREE.Scene(),
             renderer = new THREE.WebGLRenderer(),
-            light = new THREE.AmbientLight(0XFFFF),
-            camera;
-            //plane,
-            //clickObject;
-        var containerWidth,
-            containerHeight;
+            light = new THREE.AmbientLight(0xffffff),
+            camera,
+            plane;
 
-        var targetContainer = document.querySelector('#webgl-container');
+        var targetContainer = document.querySelector('#webgl-container'),
+            containerWidth;
+
+        // Controls
+        var controls;
+
+        // Grid
+        var size = 100,
+            step = 1;
+
 
         $scope.initScene = function() {
-            containerHeight = angular.element(targetContainer.clientHeight);
+
             containerWidth = targetContainer.clientWidth;
+
             // size to render content
-            //renderer.setSize($window.innerWidth, $window.innerHeight);
-            //renderer.setSize(containerWidth, containerHeight);
-            //renderer.setSize(document.querySelector('#webgl-container').clientWidth, document.querySelector('#webgl-container').clientHeight);
             renderer.setSize(containerWidth, $window.innerHeight);
 
+            // render to webgl-container
             angular.element(targetContainer.appendChild(renderer.domElement));
 
+            // Grid
+            plane = new THREE.GridHelper(size, step);
+            plane.setColors(new THREE.Color(0x00FFFF), new THREE.Color(0x00CC00));
+            scene.add(plane);
+
+            // Lights!
             scene.add(light);
 
-            //camera = new THREE.PerspectiveCamera(35, $window.innerWidth / $window.innerHeight, 1, 1000);
-            camera = new THREE.PerspectiveCamera(35, containerWidth / containerHeight, 1, 1000);
-            camera.position.z = 100;
+            // Camera!
+            camera = new THREE.PerspectiveCamera(35, containerWidth / $window.innerHeight, 1, 1000);
+            camera.position.z = 10;
 
             scene.add(camera);
 
+            controls = new THREE.OrbitControls(camera);
+            controls.addEventListener('change', render);
+
+            // Action!
             render();
         };
 
