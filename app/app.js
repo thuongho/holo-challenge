@@ -241,8 +241,11 @@
 
             // align top-left
             stats.domElement.style.position = 'absolute';
-            stats.domElement.style.left = '0px';
-            stats.domElement.style.top = '0px';
+            // bootstrap col adds 15px padding
+            stats.domElement.style.left = '15px';
+            // h1 h: 39, margin-top: 20, margin-bottom: 10
+            // dropdown h: 34
+            stats.domElement.style.top = '105px';
 
             angular.element(targetContainer.appendChild(stats.domElement));
 
