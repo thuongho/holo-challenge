@@ -7,8 +7,9 @@
     holoApp.config(function($routeProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: 'app/index.html',
-                controller: 'MainController',
+                //templateUrl: 'app/index.html',
+                templateUrl: 'app/pages/threejs.html',
+                controller: 'ThreeJSController'
             })
             .when('/max_time', {
                 templateUrl: 'app/pages/max_time.html',
@@ -114,7 +115,7 @@
     }]);
 
     // CONTROLLERS
-    holoApp.controller('MainController', ['$scope', '$location', function($scope, $location) {
+    holoApp.controller('NavController', ['$scope', '$location', function($scope, $location) {
         $scope.isActive = function(viewLocation) {
             return viewLocation === $location.path();
         };
@@ -212,7 +213,8 @@
         // The Set
         var scene = new THREE.Scene(),
             renderer = new THREE.WebGLRenderer(),
-            light = new THREE.AmbientLight(0xffffff),
+            //light = new THREE.AmbientLight(0xffffff),
+            light = new THREE.AmbientLight('#000000'),
             camera,
             plane;
 
@@ -296,7 +298,14 @@
                 sphereNumber++;
 
                 geometry = new THREE.SphereGeometry(0.2, 32, 32);
-                material = new THREE.MeshBasicMaterial({ color: 0xFFFFCC });
+                //material = new THREE.MeshBasicMaterial({ color: 0xFFFFCC });
+                material = new THREE.MeshLambertMaterial({
+                    color: '#cdd971',
+                    emissive: 0xFFFFCC,
+                    combine: THREE.MultiplyOperation,
+                    vertexColors: THREE.NoColors,
+                    wireframe: true
+                });
 
                 sphere = new THREE.Mesh(geometry, material);
 
@@ -312,7 +321,7 @@
 
         function render() {
             if (sphere) {
-                sphere.rotation.y += 0.005;
+                sphere.rotation.y += 0.0035;
             }
 
             renderer.render(scene, camera);
