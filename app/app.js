@@ -219,16 +219,15 @@
             plane;
 
         // Scene Setup
-        var targetContainer = document.querySelector('#webgl-container'),
-            containerWidth;
+        var sceneContainer = document.querySelector('#webgl-container');
 
         // Actor / Actresses
         var geometry,
             material,
-            cube,
-            cubeNumber = 0,
-            sphere,
-            sphereNumber = 0;
+            cast,
+            castNumber = 0,
+            y,
+            casts = [];
 
         // Stats
         var stats = new Stats();
@@ -236,16 +235,20 @@
         // Controls
         var controls;
 
+
         // Grid
-        var size = 10,
+        var grid,
+            size = 50,
             step = 1;
 
 
         $scope.initScene = function() {
 
             // set size to render content
-            containerWidth = targetContainer.clientWidth;
-            renderer.setSize(containerWidth, $window.innerHeight);
+            renderer.setSize(sceneContainer.clientWidth, $window.innerHeight);
+            renderer.sortObjects = false;
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFShadowMap;
 
             // Stats
             stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
@@ -258,20 +261,23 @@
             stats.domElement.style.top = '105px';
 
             // add elements to webgl-container
-            angular.element(targetContainer.appendChild(stats.domElement));
-            angular.element(targetContainer.appendChild(renderer.domElement));
+            angular.element(sceneContainer.appendChild(stats.domElement));
+            angular.element(sceneContainer.appendChild(renderer.domElement));
 
             // Grid
-            plane = new THREE.GridHelper(size, step);
-            plane.setColors(new THREE.Color(0x00FFFF), new THREE.Color(0x00CC00));
-            scene.add(plane);
+            grid = new THREE.GridHelper(size, step);
+            grid.setColors(new THREE.Color(0x00FFFF), new THREE.Color(0x00CC00));
+            scene.add(grid);
+
+
 
             // LIGHTS!
             scene.add(light);
 
             // CAMERA!
-            camera = new THREE.PerspectiveCamera(35, containerWidth / $window.innerHeight, 1, 1000);
-            camera.position.z = 25;
+            camera = new THREE.PerspectiveCamera(35, sceneContainer.clientWidth / $window.innerHeight, 1, 1000);
+            camera.position.z = 50;
+            camera.position.y = 25;
             scene.add(camera);
 
             // Controls
@@ -288,23 +294,34 @@
             // Stars of the Scene
             $scope.addCube = function() {
 
-                cubeNumber++;
+                castNumber++;
 
-                geometry = new THREE.BoxGeometry(1,2,1);
+                y = randomNumberBetween(1,5);
+
+                geometry = new THREE.BoxGeometry(
+                    randomNumberBetween(1,5),
+                    y,
+                    randomNumberBetween(1,5)
+                );
                 material = new THREE.MeshBasicMaterial({ color: 0xCCFFFF });
 
-                cube = new THREE.Mesh(geometry, material);
+                cast = new THREE.Mesh(geometry, material);
 
-                cube.name = "cube" + cubeNumber;
-                cube.position.y = 1;
+                cast.name = "cast" + castNumber;
+                cast.position.y = y / 2;
+                cast.castShadow = true;
+                cast.receiveShadow = true;
 
-                scene.add(cube);
+                scene.add(cast);
+
+                casts.push(cast);
+                console.log(cast);
+                console.log(casts);
             };
-
 
             $scope.addSphere = function() {
 
-                sphereNumber++;
+                castNumber++;
 
                 geometry = new THREE.SphereGeometry(0.2, 32, 32);
                 //material = new THREE.MeshBasicMaterial({ color: 0xFFFFCC });
@@ -316,22 +333,36 @@
                     wireframe: true
                 });
 
-                sphere = new THREE.Mesh(geometry, material);
+                cast = new THREE.Mesh(geometry, material);
 
-                sphere.name = "sphere" + sphereNumber;
-                sphere.position.y = 1;
+                cast.name = "sphere" + castNumber;
+                cast.position.y = 1;
 
-                scene.add(sphere);
+                scene.add(cast);
+
+                casts.push(cast);
+                console.log(casts);
             };
+
 
             // ACTION!
             render();
         };
 
+
+
+
         function render() {
-            if (sphere) {
-                sphere.rotation.y += 0.0035;
+            if (casts.length > 0) {
+                casts.filter(function(cast){
+                    if (cast.name.match(/sphere/)){
+                        cast.rotation.y += 0.0035;
+                    }
+                });
+
             }
+
+            //console.log(casts);
 
             controls.update();
             renderer.render(scene, camera);
@@ -342,8 +373,7 @@
         // for debugging
         return {
             scene: scene,
-            sphere: sphere,
-            cube: cube
+            casts: casts
         }
     }]);
 })();
