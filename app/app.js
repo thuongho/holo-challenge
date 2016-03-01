@@ -314,8 +314,9 @@
 
                 object = new THREE.Mesh(geometry, material);
                 object.name = "sphere" + objectNumber;
-                object.position.x = randomNumberBetween(0, size);
+                object.position.x = randomNumberBetween(-size, size);
                 object.position.y = 15;
+                object.position.z = randomNumberBetween(-size, size);
 
                 scene.add(object);
                 objects.push(object);
