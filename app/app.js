@@ -1,5 +1,5 @@
 (function() {
-    'use strict'
+    'use strict';
 
     var holoApp = angular.module('holoApp', ['ngResource', 'ngRoute']);
 
@@ -13,11 +13,11 @@
             })
             .when('/max_time', {
                 templateUrl: 'app/pages/max_time.html',
-                controller: 'MaxTimeController',
+                controller: 'MaxTimeController'
             })
             .when('/rest', {
                 templateUrl: 'app/pages/rest.html',
-                controller: 'RESTController',
+                controller: 'RESTController'
             })
             .when('/threejs', {
                 templateUrl: 'app/pages/threejs.html',
@@ -227,6 +227,8 @@
 
         $scope.initScene = function() {
 
+            $scope.daeToRender = '';
+
             // Ready the Set!
             sceneContainer = document.querySelector('#webgl-container');
 
@@ -264,19 +266,6 @@
             scene.add(light);
 
             // Stars of the Scene
-            //for ( var i = 0; i < 5; i ++ ) {
-            //
-            //    var object = new THREE.Mesh( new THREE.BoxGeometry( 20, 20, 20 ), new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
-            //    object.position.x = Math.random() * 100 - 50;
-            //    object.position.y = 10;
-            //
-            //    object.castShadow = true;
-            //    object.receiveShadow = true;
-            //
-            //    scene.add( object );
-            //
-            //    objects.push( object );
-            //}
             $scope.addCube = function() {
                 objectNumber++;
                 y = randomNumberBetween(50,100);
@@ -287,6 +276,7 @@
                     randomNumberBetween(50,100)
                 );
                 //material = new THREE.MeshBasicMaterial({ color: 0xCCFFFF });
+                //material = new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff });
                 material = new THREE.MeshLambertMaterial({ color: 0xCCFFFF });
 
                 object = new THREE.Mesh(geometry, material);
@@ -342,6 +332,8 @@
             renderer.shadowMap.type = THREE.PCFShadowMap;
             angular.element(sceneContainer.appendChild(renderer.domElement));
 
+
+
             // Stats
             stats = new Stats();
             stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
@@ -355,11 +347,31 @@
             angular.element(sceneContainer.appendChild(stats.domElement));
 
             // Quiet on the Set
-            sceneContainer.addEventListener('mousemove', onDocumentMouseMove, false);
-            sceneContainer.addEventListener('mousedown', onDocumentMouseDown, false);
-            sceneContainer.addEventListener('mouseup', onDocumentMouseUp, false);
+            sceneContainer.addEventListener('mousemove', onSceneMouseMove, false);
+            sceneContainer.addEventListener('mousedown', onSceneMouseDown, false);
+            sceneContainer.addEventListener('mouseup', onSceneMouseUp, false);
 
-            console.log('renderer.domElement:' + renderer.domElement);
+            //console.log('renderer.domElement:' + renderer.domElement);
+            //console.log(renderer);
+            //console.log('renderer.domElement');
+            //console.log(renderer.domElement);
+
+            // Drag and Drop source: http://www.sitepoint.com/html5-file-drag-and-drop/
+            // http://jsfiddle.net/vishalvasani/4hqvu/
+            if ($window.File && $window.FileList && $window.FileReader) {
+                $scope.droppable = true;
+
+                /* events fired on the drop targets */
+                sceneContainer.addEventListener('dragenter', onSceneDragHover, false);
+                sceneContainer.addEventListener('dragleave', onSceneDragHover, false);
+                sceneContainer.addEventListener('dragover', onSceneDragOver, false);
+                sceneContainer.addEventListener('drop', onSceneDrop, false);
+                //renderer.domElement.addEventListener('dragenter', onSceneDragHover, false);
+                //renderer.domElement.addEventListener('dragleave', onSceneDragHover, false);
+                //renderer.domElement.addEventListener('dragover', onSceneDragOver, false);
+                //renderer.domElement.addEventListener('drop', onSceneDrop, false);
+
+            }
 
             $window.addEventListener('resize', onWindowResize, false);
 
@@ -371,7 +383,7 @@
             return Math.floor(Math.random() * (max - min + 1)) + min;
         }
 
-        // credits to draggable cubes
+        // credits to draggable cubes - source http://threejs.org/examples/webgl_interactive_draggablecubes.html
         function onWindowResize() {
             camera.aspect = sceneContainer.clientWidth / $window.innerHeight;
             camera.updateProjectionMatrix();
@@ -379,15 +391,17 @@
             renderer.setSize(sceneContainer.clientWidth, $window.innerHeight);
         }
 
-        function onDocumentMouseMove(event) {
+        function onSceneMouseMove(event) {
+            var intersects;
             event.preventDefault();
 
+            // stuck for hours on this, didn't realize default +/- 1 was not calibrated to object
             mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1.2;
             mouse.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1.5;
 
             raycaster.setFromCamera(mouse, camera);
             if (SELECTED) {
-                var intersects = raycaster.intersectObject(plane);
+                intersects = raycaster.intersectObject(plane);
 
                 if (intersects.length > 0) {
                     SELECTED.position.copy(intersects[0].point.sub(offset));
@@ -395,7 +409,7 @@
                 return;
             }
 
-            var intersects = raycaster.intersectObjects(objects);
+            intersects = raycaster.intersectObjects(objects);
 
             if (intersects.length > 0) {
                 if (INTERSECTED != intersects[0].object) {
@@ -416,20 +430,21 @@
 
         }
 
-        function onDocumentMouseDown(event) {
+        function onSceneMouseDown(event) {
+            var intersects;
 
             event.preventDefault();
 
             raycaster.setFromCamera(mouse, camera);
 
-            var intersects = raycaster.intersectObjects(objects);
+            intersects = raycaster.intersectObjects(objects);
 
             if (intersects.length > 0) {
 
                 controls.enabled = false;
                 SELECTED = intersects[0].object;
 
-                var intersects = raycaster.intersectObject(plane);
+                intersects = raycaster.intersectObject(plane);
 
                 if (intersects.length > 0) {
                     offset.copy(intersects[0].point).sub(plane.position);
@@ -438,7 +453,7 @@
             }
         }
 
-        function onDocumentMouseUp(event) {
+        function onSceneMouseUp(event) {
 
             event.preventDefault();
 
@@ -450,6 +465,51 @@
                 SELECTED = null;
             }
             sceneContainer.style.cursor = 'auto';
+        }
+
+        // source: http://jsfiddle.net/vishalvasani/4hqvu/
+        function onSceneDragHover(event) {
+            // prevent default to allow drop
+            event.stopPropagation();
+            event.preventDefault();
+            $scope.$apply(function(){
+                $scope.dropClass = '';
+            });
+
+            //console.log('onSceneDragOver event:... ');
+            //console.log(event);
+            //console.log('drop event:', JSON.parse(JSON.stringify(event.dataTransfer)));
+        }
+
+        function onSceneDragOver(event) {
+            event.stopPropagation();
+            event.preventDefault();
+            var ok = event.dataTransfer && event.dataTransfer.types && event.dataTransfer.types.indexOf('Files') >= 0;
+            //console.log(ok);
+            $scope.$apply(function(){
+                $scope.dropClass = ok ? 'dragOver' : 'not-available';
+            });
+
+        }
+
+        function onSceneDrop(event){
+            event.stopPropagation();
+            event.preventDefault();
+
+            $scope.$apply(function(){
+                $scope.dropClass = '';
+            });
+            var files = event.dataTransfer.files;
+            console.log('files: ', files);
+            if (files.length > 0) {
+                $scope.$apply(function(){
+                    $scope.files = [];
+                    for (var i = 0; i < files.length; i++) {
+                        $scope.files.push(files[i]);
+                    }
+                });
+                console.log('scope files: ', $scope.files);
+            }
         }
 
 

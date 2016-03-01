@@ -11,11 +11,11 @@
             <ul class="dropdown-menu" aria-labelledby="dropdownObjectMenu">
                 <li><a href ng-click="addCube()">Cube</a></li>
                 <li><a href ng-click="addSphere()">Ball</a></li>
-                <li><a href>Drag your own file onto screen</a></li>
+                <li><a href ng-show="droppable">Drag your own file onto screen</a></li>
                 <li role="separator" class="divider"></li>
                 <li><a href>Separated link</a></li>
             </ul>
         </div>
-        <div id="webgl-container" ng-init="initScene()"></div>
+        <div id="webgl-container" ng-init="initScene()" ng-class="dropClass"></div>
     </div>
 </div>
