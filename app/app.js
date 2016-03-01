@@ -218,6 +218,10 @@
             camera,
             plane;
 
+        // Scene Setup
+        var targetContainer = document.querySelector('#webgl-container'),
+            containerWidth;
+
         // Actor / Actresses
         var geometry,
             material,
@@ -228,9 +232,6 @@
 
         // Stats
         var stats = new Stats();
-
-        var targetContainer = document.querySelector('#webgl-container'),
-            containerWidth;
 
         // Controls
         var controls;
@@ -274,7 +275,15 @@
             scene.add(camera);
 
             // Controls
-            controls = new THREE.OrbitControls( camera, renderer.domElement );
+            controls = new THREE.TrackballControls( camera, renderer.domElement );
+            //controls = new THREE.TrackballControls( camera );
+            controls.rotateSpeed = 1.0;
+            controls.zoomSpeed = 1.2;
+            controls.panSpeed = 0.8;
+            controls.noZoom = false;
+            controls.noPan = false;
+            controls.staticMoving = true;
+            controls.dynamicDampingFactor = 0.3;
 
             // Stars of the Scene
             $scope.addCube = function() {
@@ -324,6 +333,7 @@
                 sphere.rotation.y += 0.0035;
             }
 
+            controls.update();
             renderer.render(scene, camera);
             requestAnimationFrame(render);
             stats.update();
