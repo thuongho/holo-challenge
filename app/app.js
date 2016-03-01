@@ -210,79 +210,36 @@
 
     holoApp.controller('ThreeJSController', ['$scope', '$window', function($scope, $window) {
 
-        // The Set
-        var scene = new THREE.Scene(),
-            renderer = new THREE.WebGLRenderer(),
-            //light = new THREE.AmbientLight(0xffffff),
-            light = new THREE.AmbientLight('#000000'),
-            camera,
-            plane;
+        // The Setup
+        var sceneContainer, stats;
+        var light, camera, controls, scene, renderer;
+        var grid, plane,
+            size = 1000,
+            step = 10;
+        var geometry, material, y, object,
+            objects = [],
+            objectNumber = 0;
 
-        // Scene Setup
-        var sceneContainer = document.querySelector('#webgl-container');
-
-        // Actor / Actresses
-        var geometry,
-            material,
-            cast,
-            castNumber = 0,
-            y,
-            casts = [];
-
-        // Stats
-        var stats = new Stats();
-
-        // Controls
-        var controls;
-
-
-        // Grid
-        var grid,
-            size = 50,
-            step = 1;
-
+        var raycaster = new THREE.Raycaster();
+        var mouse = new THREE.Vector2(),
+            offset = new THREE.Vector3(),
+            INTERSECTED, SELECTED;
 
         $scope.initScene = function() {
 
-            // set size to render content
-            renderer.setSize(sceneContainer.clientWidth, $window.innerHeight);
-            renderer.sortObjects = false;
-            renderer.shadowMap.enabled = true;
-            renderer.shadowMap.type = THREE.PCFShadowMap;
-
-            // Stats
-            stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
-
-            // align top-left
-            // bootstrap col adds 15px padding to left
-            // h1 h: 39, margin-top: 20, margin-bottom: 10 and dropdown h: 34
-            stats.domElement.style.position = 'absolute';
-            stats.domElement.style.left = '15px';
-            stats.domElement.style.top = '105px';
-
-            // add elements to webgl-container
-            angular.element(sceneContainer.appendChild(stats.domElement));
-            angular.element(sceneContainer.appendChild(renderer.domElement));
-
-            // Grid
-            grid = new THREE.GridHelper(size, step);
-            grid.setColors(new THREE.Color(0x00FFFF), new THREE.Color(0x00CC00));
-            scene.add(grid);
-
-
-
-            // LIGHTS!
-            scene.add(light);
+            // Ready the Set!
+            sceneContainer = document.querySelector('#webgl-container');
 
             // CAMERA!
-            camera = new THREE.PerspectiveCamera(35, sceneContainer.clientWidth / $window.innerHeight, 1, 1000);
-            camera.position.z = 50;
-            camera.position.y = 25;
-            scene.add(camera);
+            camera = new THREE.PerspectiveCamera(70, sceneContainer.clientWidth / $window.innerHeight, 1, 10000);
+            //camera = new THREE.PerspectiveCamera(70, $window.innerWidth / $window.innerHeight, 1, 10000);
+            camera.position.z = 1000;
+            camera.position.y = 500;
+            //scene.add(camera);
 
             // Controls
-            controls = new THREE.TrackballControls( camera, renderer.domElement );
-            //controls = new THREE.TrackballControls( camera );
+            //controls = new THREE.TrackballControls( camera, renderer.domElement );
+            controls = new THREE.TrackballControls( camera );
             controls.rotateSpeed = 1.0;
             controls.zoomSpeed = 1.2;
             controls.panSpeed = 0.8;
@@ -291,39 +248,61 @@
             controls.staticMoving = true;
             controls.dynamicDampingFactor = 0.3;
 
+            scene = new THREE.Scene();
+
+            // LIGHTS!
+            scene.add( new THREE.AmbientLight(0x505050));
+            light = new THREE.SpotLight(0xffffff, 1.5);
+            light.position.set(0, 500, 2000);
+            light.castShadow = true;
+            light.shadow.camera.near = 200;
+            light.shadow.camera.far = camera.far;
+            light.shadow.camera.fov = 50;
+            light.shadow.bias = -0.00022;
+            light.shadow.mapSize.width = 2048;
+            light.shadow.mapSize.height = 2048;
+            scene.add(light);
+
             // Stars of the Scene
+            //for ( var i = 0; i < 5; i ++ ) {
+            //
+            //    var object = new THREE.Mesh( new THREE.BoxGeometry( 20, 20, 20 ), new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff } ) );
+            //    object.position.x = Math.random() * 100 - 50;
+            //    object.position.y = 10;
+            //
+            //    object.castShadow = true;
+            //    object.receiveShadow = true;
+            //
+            //    scene.add( object );
+            //
+            //    objects.push( object );
+            //}
             $scope.addCube = function() {
-
-                castNumber++;
-
-                y = randomNumberBetween(1,5);
+                objectNumber++;
+                y = randomNumberBetween(50,100);
 
                 geometry = new THREE.BoxGeometry(
-                    randomNumberBetween(1,5),
+                    randomNumberBetween(50,100),
                     y,
-                    randomNumberBetween(1,5)
+                    randomNumberBetween(50,100)
                 );
-                material = new THREE.MeshBasicMaterial({ color: 0xCCFFFF });
+                //material = new THREE.MeshBasicMaterial({ color: 0xCCFFFF });
+                material = new THREE.MeshLambertMaterial({ color: 0xCCFFFF });
 
-                cast = new THREE.Mesh(geometry, material);
+                object = new THREE.Mesh(geometry, material);
+                object.name = "cube" + objectNumber;
+                object.position.y = y / 2;
+                object.castShadow = true;
+                object.receiveShadow = true;
 
-                cast.name = "cast" + castNumber;
-                cast.position.y = y / 2;
-                cast.castShadow = true;
-                cast.receiveShadow = true;
-
-                scene.add(cast);
-
-                casts.push(cast);
-                console.log(cast);
-                console.log(casts);
+                scene.add(object);
+                objects.push(object);
             };
 
             $scope.addSphere = function() {
+                objectNumber++;
 
-                castNumber++;
-
-                geometry = new THREE.SphereGeometry(0.2, 32, 32);
+                geometry = new THREE.SphereGeometry(20, 32, 32);
                 //material = new THREE.MeshBasicMaterial({ color: 0xFFFFCC });
                 material = new THREE.MeshLambertMaterial({
                     color: '#cdd971',
@@ -333,47 +312,166 @@
                     wireframe: true
                 });
 
-                cast = new THREE.Mesh(geometry, material);
+                object = new THREE.Mesh(geometry, material);
+                object.name = "sphere" + objectNumber;
+                object.position.x = randomNumberBetween(0, size);
+                object.position.y = 15;
 
-                cast.name = "sphere" + castNumber;
-                cast.position.y = 1;
-
-                scene.add(cast);
-
-                casts.push(cast);
-                console.log(casts);
+                scene.add(object);
+                objects.push(object);
             };
 
+            // Plane
+            plane = new THREE.Mesh(
+                new THREE.PlaneBufferGeometry( 2000, 2000, 8, 8 ),
+                new THREE.MeshBasicMaterial( { color: 0xFFFFCC, visible: false } )
+            );
+            scene.add(plane);
+
+            // Grid
+            grid = new THREE.GridHelper(size, step);
+            grid.setColors(new THREE.Color(0x00FFFF), new THREE.Color(0x00CC00));
+            scene.add(grid);
+
+            renderer = new THREE.WebGLRenderer( { antialias: true } );
+            renderer.setPixelRatio( $window.devicePixelRatio );
+            renderer.setSize(sceneContainer.clientWidth, $window.innerHeight);
+            renderer.sortObjects = false;
+            renderer.shadowMap.enabled = true;
+            renderer.shadowMap.type = THREE.PCFShadowMap;
+            angular.element(sceneContainer.appendChild(renderer.domElement));
+
+            // Stats
+            stats = new Stats();
+            stats.setMode( 0 ); // 0: fps, 1: ms, 2: mb
+
+            // align top-left
+            // bootstrap col adds 15px padding to left
+            // h1 h: 39, margin-top: 20, margin-bottom: 10 and dropdown h: 34
+            stats.domElement.style.position = 'absolute';
+            stats.domElement.style.left = '15px';
+            stats.domElement.style.top = '105px';
+            angular.element(sceneContainer.appendChild(stats.domElement));
+
+            // Quiet on the Set
+            sceneContainer.addEventListener('mousemove', onDocumentMouseMove, false);
+            sceneContainer.addEventListener('mousedown', onDocumentMouseDown, false);
+            sceneContainer.addEventListener('mouseup', onDocumentMouseUp, false);
+
+            console.log('renderer.domElement:' + renderer.domElement);
+
+            $window.addEventListener('resize', onWindowResize, false);
 
             // ACTION!
             render();
         };
 
+        function randomNumberBetween(min, max) {
+            return Math.floor(Math.random() * (max - min + 1)) + min;
+        }
 
+        // credits to draggable cubes
+        function onWindowResize() {
+            camera.aspect = sceneContainer.clientWidth / $window.innerHeight;
+            camera.updateProjectionMatrix();
+
+            renderer.setSize(sceneContainer.clientWidth, $window.innerHeight);
+        }
+
+        function onDocumentMouseMove(event) {
+            event.preventDefault();
+
+            mouse.x = (event.clientX / renderer.domElement.clientWidth) * 2 - 1.2;
+            mouse.y = - (event.clientY / renderer.domElement.clientHeight) * 2 + 1.5;
+
+            raycaster.setFromCamera(mouse, camera);
+            if (SELECTED) {
+                var intersects = raycaster.intersectObject(plane);
+
+                if (intersects.length > 0) {
+                    SELECTED.position.copy(intersects[0].point.sub(offset));
+                }
+                return;
+            }
+
+            var intersects = raycaster.intersectObjects(objects);
+
+            if (intersects.length > 0) {
+                if (INTERSECTED != intersects[0].object) {
+                    if (INTERSECTED) { INTERSECTED.material.color.setHex(INTERSECTED.currentHex); }
+
+                    INTERSECTED = intersects[0].object;
+                    INTERSECTED.currentHex = INTERSECTED.material.color.getHex();
+
+                    plane.position.copy(INTERSECTED.position);
+                    plane.lookAt(camera.position);
+                }
+                sceneContainer.style.cursor = 'pointer';
+            } else {
+                if (INTERSECTED) { INTERSECTED.material.color.setHex(INTERSECTED.currentHex); }
+                INTERSECTED = null;
+                sceneContainer.style.cursor = 'auto';
+            }
+
+        }
+
+        function onDocumentMouseDown(event) {
+
+            event.preventDefault();
+
+            raycaster.setFromCamera(mouse, camera);
+
+            var intersects = raycaster.intersectObjects(objects);
+
+            if (intersects.length > 0) {
+
+                controls.enabled = false;
+                SELECTED = intersects[0].object;
+
+                var intersects = raycaster.intersectObject(plane);
+
+                if (intersects.length > 0) {
+                    offset.copy(intersects[0].point).sub(plane.position);
+                }
+                sceneContainer.style.cursor = 'move';
+            }
+        }
+
+        function onDocumentMouseUp(event) {
+
+            event.preventDefault();
+
+            controls.enabled = true;
+
+            if (INTERSECTED) {
+                plane.position.copy(INTERSECTED.position);
+
+                SELECTED = null;
+            }
+            sceneContainer.style.cursor = 'auto';
+        }
 
 
         function render() {
-            if (casts.length > 0) {
-                casts.filter(function(cast){
-                    if (cast.name.match(/sphere/)){
-                        cast.rotation.y += 0.0035;
+            if (objects.length > 0) {
+                objects.filter(function(object){
+                    if (object.name.match(/sphere/)){
+                        object.rotation.y += 0.0035;
                     }
                 });
 
             }
 
-            //console.log(casts);
-
+            requestAnimationFrame(render);
             controls.update();
             renderer.render(scene, camera);
-            requestAnimationFrame(render);
             stats.update();
         }
 
         // for debugging
         return {
             scene: scene,
-            casts: casts
+            objects: objects
         }
     }]);
 })();
