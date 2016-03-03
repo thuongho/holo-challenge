@@ -2,9 +2,14 @@
     <div class="col-md-12">
         <h1 class="text-center">Master of My Universe</h1>
 
+        <div class="progress-bar col-md-3 pull-right" ng-init="progressBar=false" ng-show="progressBar">
+            <div class="percent">{{progress}}%</div>
+            <div class="progress" ng-style="{'width': progress+'%'}"></div>
+        </div>
         <!-- Dropdown to add Objects -->
         <div class="dropdown pull-right">
-            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownObjectMenu" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <button class="btn btn-default dropdown-toggle" type="button" id="dropdownObjectMenu" data-toggle="dropdown"
+                    aria-haspopup="true" aria-expanded="true">
                 God Mode
                 <span class="caret"></span>
             </button>
