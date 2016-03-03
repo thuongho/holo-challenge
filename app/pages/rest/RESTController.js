@@ -8,12 +8,14 @@
             // show all items
             $scope.showAllItemsContainer = true;
             $scope.hideShowButtonName = 'Hide All';
+            $scope.load = true;
 
             RESTService.get().then(function (data) {
-                $scope.allItems = true;
-                console.log(JSON.stringify(data));
-                $scope.sampleObjects = data;
-
+                if (data) {
+                    $scope.load = false;
+                    $scope.allItems = true;
+                    $scope.sampleObjects = data;
+                }
             });
         };
 
