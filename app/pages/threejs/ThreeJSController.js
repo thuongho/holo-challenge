@@ -1,7 +1,7 @@
 (function () {
     'use strict';
 
-    angular.module('holoApp').controller('ThreeJSController', ['$scope', '$window',  function ($scope, $window) {
+    angular.module('holoApp').controller('ThreeJSController', ['$scope', '$window', function ($scope, $window) {
 
         // The Setup
         var sceneContainer, stats;
@@ -308,8 +308,8 @@
             if (filesDropped.length > 0) {
 
                 // Check for only DAE files
-                filesDropped.filter(function(file){
-                    if (file.name.match(/\.dae$/i)){
+                filesDropped.filter(function (file) {
+                    if (file.name.match(/\.dae$/i)) {
 
                         // generate a URL for the dropped file
                         var objectURL = $window.URL.createObjectURL(files[0]);
@@ -321,9 +321,11 @@
                             function (xhr) {
                                 $scope.progressBar = true;
                                 console.log((xhr.loaded / xhr.total * 100) + '% loaded');
-                                $scope.$apply(function() {
+                                $scope.$apply(function () {
                                     $scope.progress = Math.round(xhr.loaded / xhr.total * 100);
-                                    if ($scope.progress >= 100) { $scope.progressBar = false; }
+                                    if ($scope.progress >= 100) {
+                                        $scope.progressBar = false;
+                                    }
                                 })
 
                             });
