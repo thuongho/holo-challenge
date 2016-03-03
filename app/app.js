@@ -208,7 +208,7 @@
         };
     }]);
 
-    holoApp.controller('ThreeJSController', ['$scope', '$window', function($scope, $window) {
+    holoApp.controller('ThreeJSController', ['$scope', '$window', '$http', function($scope, $window, $http) {
 
         // The Setup
         var sceneContainer, stats;
@@ -527,7 +527,45 @@
                     }
                 });
                 console.log('scope files: ', $scope.files);
+                console.log('file is : ', $scope.files[0]);
+                var objectURL = $window.URL.createObjectURL(files[0]);
+                console.log(objectURL);
+
+                // use collada to add to scene
+                loader.load(objectURL, function(collada){
+                    scene.add(collada.scene);
+                },
+                function ( xhr ) {
+                    console.log( (xhr.loaded / xhr.total * 100) + '% loaded' );
+                });
             }
+        }
+
+        function errorHandler(e) {
+            var msg = '';
+
+            switch (e.code) {
+                case FileError.QUOTA_EXCEEDED_ERR:
+                    msg = 'QUOTA_EXCEEDED_ERR';
+                    break;
+                case FileError.NOT_FOUND_ERR:
+                    msg = 'NOT_FOUND_ERR';
+                    break;
+                case FileError.SECURITY_ERR:
+                    msg = 'SECURITY_ERR';
+                    break;
+                case FileError.INVALID_MODIFICATION_ERR:
+                    msg = 'INVALID_MODIFICATION_ERR';
+                    break;
+                case FileError.INVALID_STATE_ERR:
+                    msg = 'INVALID_STATE_ERR';
+                    break;
+                default:
+                    msg = 'Unknown Error';
+                    break;
+            };
+
+            console.log('Error: ' + msg);
         }
 
 
