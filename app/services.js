@@ -3,18 +3,19 @@
 
     angular.module('holoApp').factory('RESTService', ['$http', '$q', function($http, $q) {
 
-        //$http.get('/someUrl', config).then(successCallback, errorCallback);
         var get = function() {
             var deferred = $q.defer(),
                 url = 'http://2-dot-crowdev-template.appspot.com/v1/tests/?callback=JSON_CALLBACK';
 
-            $http.get(url).success(function(data, status, header, config) {
-                //console.log(data);
-                deferred.resolve(data);
-            }).error(function(data, status, header, config) {
-                console.log(status);
-                deferred.reject(status);
-            });
+            $http.get(url).then(
+              function(response) {
+                  deferred.resolve(response.data);
+              },
+                function(response) {
+                    console.error('Error: ', response.statusText);
+                    deferred.reject(response.status);
+                }
+            );
 
             return deferred.promise;
         };
