@@ -1,10 +1,10 @@
-(function() {
+(function () {
     'use strict';
 
     var holoApp = angular.module('holoApp', ['ngResource', 'ngRoute']);
 
     // ROUTING
-    holoApp.config(function($routeProvider) {
+    holoApp.config(function ($routeProvider) {
         $routeProvider
             .when('/', {
                 templateUrl: 'app/pages/threejs.html',
@@ -22,13 +22,13 @@
                 templateUrl: 'app/pages/threejs/threejs.html',
                 controller: 'ThreeJSController'
             })
-            .otherwise({ redirectTo: '/threejs'});
+            .otherwise({redirectTo: '/threejs'});
     });
 
 
     // CONTROLLERS
-    holoApp.controller('NavController', ['$scope', '$location', function($scope, $location) {
-        $scope.isActive = function(viewLocation) {
+    holoApp.controller('NavController', ['$scope', '$location', function ($scope, $location) {
+        $scope.isActive = function (viewLocation) {
             return viewLocation === $location.path();
         };
     }]);
