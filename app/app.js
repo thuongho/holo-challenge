@@ -22,7 +22,7 @@
                 templateUrl: 'app/pages/threejs/threejs.html',
                 controller: 'ThreeJSController'
             })
-            .otherwise({ redirectTo: '/'});
+            .otherwise({ redirectTo: '/threejs'});
     });
 
 
