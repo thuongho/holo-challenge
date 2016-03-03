@@ -213,6 +213,7 @@
         // The Setup
         var sceneContainer, stats;
         var light, camera, controls, scene, renderer;
+        var loader, model, dae;
         var grid, plane,
             size = 1000,
             step = 10;
@@ -226,8 +227,6 @@
             INTERSECTED, SELECTED;
 
         $scope.initScene = function() {
-
-            $scope.daeToRender = '';
 
             // Ready the Set!
             sceneContainer = document.querySelector('#webgl-container');
@@ -276,8 +275,8 @@
                     randomNumberBetween(50,100)
                 );
                 //material = new THREE.MeshBasicMaterial({ color: 0xCCFFFF });
-                //material = new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff });
-                material = new THREE.MeshLambertMaterial({ color: 0xCCFFFF });
+                material = new THREE.MeshLambertMaterial( { color: Math.random() * 0xffffff });
+                //material = new THREE.MeshLambertMaterial({ color: 0xCCFFFF });
 
                 object = new THREE.Mesh(geometry, material);
                 object.name = "cube" + objectNumber;
@@ -312,6 +311,27 @@
                 objects.push(object);
             };
 
+            // Collada
+            loader = new THREE.ColladaLoader();
+            loader.options.convertUpAxis = true;
+
+            // "Tron Lightcycle" by LiNk2.0
+            // http://www.blendswap.com/blends/view/23067
+            model = './models/tron-light-cycle1.dae';
+            loader.load(model, function(collada) {
+                console.log('collada ', collada);
+                dae = collada.scene;
+
+                dae.scale.x = dae.scale.y = dae.scale.z = 5;
+                dae.position.y = 1;
+                dae.updateMatrix();
+            });
+
+            $scope.loadLightCycle = function() {
+                scene.add(dae);
+            };
+
+
             // Plane
             plane = new THREE.Mesh(
                 new THREE.PlaneBufferGeometry( 2000, 2000, 8, 8 ),
@@ -331,8 +351,6 @@
             renderer.shadowMap.enabled = true;
             renderer.shadowMap.type = THREE.PCFShadowMap;
             angular.element(sceneContainer.appendChild(renderer.domElement));
-
-
 
             // Stats
             stats = new Stats();
