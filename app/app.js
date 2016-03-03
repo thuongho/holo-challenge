@@ -7,7 +7,7 @@
     holoApp.config(function ($routeProvider) {
         $routeProvider
             .when('/', {
-                templateUrl: 'app/pages/threejs.html',
+                templateUrl: 'app/pages/threejs/threejs.html',
                 controller: 'ThreeJSController'
             })
             .when('/max_time', {
