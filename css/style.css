@@ -118,7 +118,11 @@ body {
     -moz-animation-delay:1.64s;
 }
 
-
+.weird {
+    color: red;
+    font-size: 30px;
+    margin-top: 10px;
+}
 
 
 @keyframes bounce_fountainTextG{
