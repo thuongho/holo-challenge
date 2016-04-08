@@ -148,7 +148,7 @@
             // h1 h: 39, margin-top: 20, margin-bottom: 10 and dropdown h: 34
             stats.domElement.style.position = 'absolute';
             stats.domElement.style.left = '15px';
-            stats.domElement.style.top = '105px';
+            stats.domElement.style.top = '135px';
             angular.element(sceneContainer.appendChild(stats.domElement));
 
             // Quiet on the Set
